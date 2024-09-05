@@ -2,6 +2,7 @@ console.log("Welcome to Tic Tac Toe")
 let music = new Audio("music.mp3")
 let audioturn =  new Audio("ting.mp3")
 let gameover = new Audio("gameover.mp3")
+let win = new Audio("win.mp3")
 let isgameover = false
 let turn = "X"
 
@@ -12,7 +13,7 @@ const changeTurn = () =>{
 
 // function  to check for a win
 const checkWin = () => {
-        let boxtext = document.getElementsByClassName('boxtext');
+        let boxtext = document.querySelectorAll('.boxtext');
         let wins = [
             [0, 1, 2, 5, 5, 0],
             [3, 4, 5, 5, 15, 0],
@@ -23,16 +24,23 @@ const checkWin = () => {
             [0, 4, 8, 5, 15, 45],
             [2, 4, 6, 5, 15, 135],
         ]
+        
+        // Initially hide the GIF
+        document.querySelector('.imgbox').getElementsByTagName('img')[0].style.display = "none";
+
         wins.forEach(e => {
             if((boxtext[e[0]].innerText === boxtext[e[1]].innerText) && (boxtext[e[2]].innerText === boxtext[e[1]].innerText) && (boxtext[e[0]].innerText !== "") ){
-                document.querySelector('.info').innerText = boxtext[e[0]].innerText + " Won"
-                isgameover = true
+                console.log("Winner detected: " + boxtext[e[0]].innerText);
+                document.querySelector('.info2').innerText = ("Winner is" +" "+ boxtext[e[0]].innerText);
+                win.play();
+                isgameover = true;
+                // Display the GIF when there is a winner
+                document.querySelector('.imgbox').getElementsByTagName('img')[0].style.display = "block";
                 document.querySelector('.imgbox').getElementsByTagName('img')[0].style.width = "200px";
-            document.querySelector(".line").style.transform = `translate(${e[3]}vw, ${e[4]}vw) rotate(${e[5]}deg)`
-            document.querySelector(".line").style.width = "20vw";
         }
     })
-}
+}   
+
             
 
 
@@ -46,8 +54,23 @@ Array.from(boxes).forEach(element =>{
             turn = changeTurn();
             audioturn.play();
             checkWin();
-            document.getElementsByClassName("info")[0].innerText  = "Turn for " + turn;
+            document.getElementsByClassName("info")[0].innerText  = "Turn for"+ " " +turn;
             
         }
     })
+})
+
+
+//add on click listener to reset button
+reset.addEventListener('click',()=>{
+    let boxtexts = document.querySelectorAll('.boxtext');
+    Array.from(boxtexts).forEach(element =>{
+        element.innerText = ""
+    });
+    turn = "X";
+    isgameover = false
+    document.getElementsByClassName("info")[0].innerText = "Turn for"+ " " +turn;
+    document.querySelector('.imgbox').getElementsByTagName('img')[0].style.display = "none";
+    document.querySelector('.info2').innerText = ("Winner is");
+
 })
